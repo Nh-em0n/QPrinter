@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>QPrinter — MD / HTML / URL to PDF Studio</title>
+  <link rel="icon" href="data:,">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bs_extend.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ── Workspace: editor + PDF renderer ───────────────────────────────── -->
+  <main class="workspace">
+    <div class="workspace-grid">
+
+      <!-- EDITOR PANEL -->
+      <section class="panel" aria-label="Source editor">
+        <div class="panel__header">
+          <div class="tabs" role="tablist" aria-label="Input format">
+            <button class="tab active" id="tab-markdown" data-mode="markdown" role="tab" aria-selected="true" type="button">Markdown</button>
+            <button class="tab" id="tab-html" data-mode="html" role="tab" aria-selected="false" type="button">HTML</button>
+            <button class="tab" id="tab-url" data-mode="url" role="tab" aria-selected="false" type="button">URL</button>
+          </div>
+
+          <div class="panel__actions">
+            <button class="gh-btn" id="sampleBtn" type="button" title="Load a sample document">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3l1.7 5.1L19 10l-5.3 1.9L12 17l-1.7-5.1L5 10l5.3-1.9L12 3Z"/><path d="M19 16l.7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z"/>
+              </svg>
+              Sample
+            </button>
+            <button class="gh-btn gh-btn--danger" id="clearBtn" type="button" title="Clear the editor">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/>
+              </svg>
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div class="panel__body editor-shell">
+          <textarea id="editor" class="editor" spellcheck="false" aria-label="Markdown or HTML source" placeholder="Start typing your document…"></textarea>
+        </div>
+
+        <div class="panel__footer meta-footer">
+          <span id="counts" class="meta-footer__counts">0 words · 0 characters</span>
+          <span id="status" class="text-muted">Ready · Ctrl+Enter to render</span>
+        </div>
+      </section>
+
+      <!-- PREVIEW PANEL -->
+      <section class="panel" aria-label="PDF preview and export options">
+        <div class="panel__header">
+          <div class="panel__title">
+            <span class="panel__title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 14h8M8 18h5"/>
+              </svg>
+            </span>
+            <span>Rendered PDF</span>
+            <span class="live-badge">Manual</span>
+          </div>
+
+          <div class="panel__actions">
+            <button class="gh-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#pdfConfig" aria-controls="pdfConfig" title="PDF settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>
+              </svg>
+              Settings
+            </button>
+            <button class="gh-btn" id="refreshBtn" type="button" title="Render PDF from current sources (Ctrl+Enter)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>
+              </svg>
+              Refresh
+            </button>
+            <button class="gh-btn gh-btn--primary" id="downloadBtn" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/>
+              </svg>
+              Download PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="panel__body preview-shell">
+          <iframe id="pdfFrame" title="PDF preview" class="pdf-frame"></iframe>
+          <div id="overlay" class="preview-overlay hidden">
+            <div class="overlay-card">
+              <span class="spinner" aria-hidden="true"></span>
+              <span>Building your PDF…</span>
+            </div>
+          </div>
+          <noscript>
+            <div class="preview-overlay"><div class="overlay-card">Enable JavaScript to build the PDF.</div></div>
+          </noscript>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ── PDF configuration (left offcanvas) ────────────────────────────── -->
+  <div class="offcanvas offcanvas-start config-drawer" tabindex="-1" id="pdfConfig" aria-labelledby="pdfConfigTitle">
+    <div class="offcanvas-header config-drawer__header">
+      <div>
+        <h2 class="offcanvas-title config-drawer__title" id="pdfConfigTitle">PDF settings</h2>
+        <p class="config-drawer__subtitle">Output configuration</p>
+      </div>
+      <button type="button" class="config-close" data-bs-dismiss="offcanvas" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="offcanvas-body config-drawer__body">
+      <section class="config-section">
+        <h3 class="config-section__title">Document</h3>
+        <div class="field">
+          <label for="filename">Filename</label>
+          <input id="filename" type="text" value="document" class="control" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="theme">Theme template</label>
+          <select id="theme" class="control">
+            <option value="mint" selected>Mint Deck</option>
+            <option value="slate">Slate Deck</option>
+            <option value="navy">Navy Report</option>
+            <option value="navyblue">Navy Blue</option>
+            <option value="ink">Ink Paper</option>
+            <option value="crimsonred">Crimson Red</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pageSize">Page size</label>
+          <select id="pageSize" class="control">
+            <option value="A4" selected>A4</option>
+            <option value="Letter">Letter</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="config-section">
+        <h3 class="config-section__title">Layout</h3>
+        <label class="switch" for="pageNumbers">
+          <input type="checkbox" id="pageNumbers" checked>
+          <span class="switch__track" aria-hidden="true"></span>
+          <span>Show page numbers</span>
+        </label>
+        <label class="switch" for="autoToc">
+          <input type="checkbox" id="autoToc">
+          <span class="switch__track" aria-hidden="true"></span>
+          <span>Insert table of contents</span>
+        </label>
+      </section>
+
+      <section class="config-section">
+        <h3 class="config-section__title">Footer &amp; watermark</h3>
+        <div class="field">
+          <label for="footerText">Footer text</label>
+          <input id="footerText" type="text" class="control" placeholder="e.g. Confidential · Internal use" autocomplete="off" spellcheck="false">
+          <small class="field__hint">Printed at the bottom-left of every page.</small>
+        </div>
+        <div class="field">
+          <label for="watermark">Watermark</label>
+          <input id="watermark" type="text" class="control" placeholder="e.g. DRAFT" autocomplete="off" spellcheck="false">
+          <small class="field__hint">Faint diagonal text. Leave blank to disable.</small>
+        </div>
+      </section>
+
+      <p class="config-note">Changes are applied to the PDF preview automatically.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.14.1/runtime.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.11/dist/purify.min.js"></script>
+  <!-- Classic scripts work from file:// as well as from a local web server. -->
+  <script src="pdfFromHtml.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
