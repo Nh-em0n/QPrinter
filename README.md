@@ -1,4 +1,6 @@
-# MD / HTML / URL → PDF Studio
+# QPrinter 
+
+**MD / HTML / URL → PDF Studio**
 
 A tiny browser-only tool: write **Markdown**, paste **HTML**, or enter a **web page URL**
 on the left, see the **rendered PDF** on the right, and download it. Vanilla JS with a
