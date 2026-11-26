@@ -1899,6 +1899,9 @@ var pdfFromHtml = (function (global) {
     async list(b) {
       var fs = this.o.fontSize;
       var textIndent = 26;
+      // A nested list starts one extra step past its parent's text, so every
+      // level is visibly deeper instead of sharing the parent's hanging indent.
+      var nestedExtra = 18;
       var n = b.start || 1;
 
       for (var i = 0; i < (b.items || []).length; i++) {
@@ -1936,7 +1939,8 @@ var pdfFromHtml = (function (global) {
             this.y += 2;
           } else {
             if (j === 0) drawMarker();
-            await this.blockWithIndent(child, textIndent);
+            var childIndent = child.type === 'list' ? textIndent + nestedExtra : textIndent;
+            await this.blockWithIndent(child, childIndent);
           }
         }
         this.y += 3;
