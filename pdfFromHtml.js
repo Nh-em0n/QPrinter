@@ -116,10 +116,12 @@ var pdfFromHtml = (function (global) {
       surfaceAlt: '#eef0f3',
       text: '#1f2328',
       heading: '#1f2328',
+      headingEmphasis: '#1f2328',
       muted: '#656d76',
       accent: '#4b5563',
+      quoteBar: '#4b5563',
       border: '#d8dce2',
-      link: '#2f5f9e',
+      link: '#58a6ff',
       quoteText: '#3a4048',
       codeBg: '#f3f6f9',
       codeBorder: '#d8dee4',
@@ -1568,7 +1570,7 @@ var pdfFromHtml = (function (global) {
 
       this.rect(this.m.left - 16, this.y, this.contentW + 32, bandH, this.C.surface);
       var top = this.drawLines(lines, this.m.left + 20, this.y + 10, this.contentW - 40, {
-        align: 'center', color: this.col('heading'), fontSize: size, lineHeight: size * 1.3
+        align: 'center', color: this.col('headingEmphasis'), fontSize: size, lineHeight: size * 1.3
       });
       this.y += bandH + 12;
 
@@ -1670,7 +1672,8 @@ var pdfFromHtml = (function (global) {
           this.col('accent'), { x: this.m.left });
       }
       this.y = this.drawLines(lines, this.m.left + gutter, top, this.contentW - gutter, {
-        align: 'left', fontSize: size, lineHeight: size * 1.35
+        align: 'left', fontSize: size, lineHeight: size * 1.35,
+        color: lv <= 3 ? this.col('headingEmphasis') : undefined
       });
       this.y += after;
     }
@@ -1743,7 +1746,7 @@ var pdfFromHtml = (function (global) {
       // Panel and left rule are flush with the normal text margins; only the
       // text inside keeps a small padding so it does not touch the border.
       this.card(this.m.left, this.y, this.contentW, height, this.C.surface);
-      this.rect(this.m.left, this.y, 3, height, this.C.accent);
+      this.rect(this.m.left, this.y, 3, height, this.C.quoteBar);
       var bottom = this.drawLines(lines, this.m.left + padX, this.y + padY, textW, {
         align: this.o.justify ? 'justify' : 'left',
         color: this.col('quoteText'), fontSize: fs, lineHeight: lh, italic: true

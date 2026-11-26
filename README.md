@@ -58,8 +58,8 @@ error instead of staying on the “Building PDF…” spinner.
    are flush-left, tables have a dark theme-coloured header, subtly striped
    white rows, and page numbers appear in the footer. Presets own every style value, so there
    is no separate custom mode.
-5. Fonts are embedded with `subset: true`. Base families include **Lato**,
-   **Noto Serif**, **Poppins** and **Crimson Text**. Code and table headers use
+5. Fonts are embedded with `subset: true`. All theme presets use **Poppins**;
+   **Lato** remains the fallback base family. Code and table headers use
    the active base family — no monospace face is loaded. **STIX Two Math** handles
    operators/symbols and **KaTeX** Main/Math-Italic handles upright digits/text
    and variables. Monochrome **Noto Emoji** renders emoji in body text, footer
@@ -74,26 +74,63 @@ error instead of staying on the “Building PDF…” spinner.
 
 ## Theme presets
 
-Choose **Theme template** in the preview footer. Mint Deck is the default and
-the reference look; the other presets are modern variants with their own font
-family, size, primary colour, spacing and margin. Only the selected base face is
-embedded.
+Choose **Theme template** in the settings drawer. All nine presets are exact
+Mint Deck clones — same Poppins face, 10 pt size, 1.68/11 spacing and relaxed
+margins — with their own palette. Only the Poppins face is embedded.
 
-| Preset | Base font | Size | Primary | Spacing (line / paragraph) | Margin |
-| --- | --- | --- | --- | --- | --- |
-| Mint Deck | Poppins (geometric) | 10 pt | Teal `#0f766e` | 1.68 / 11 | Relaxed |
-| Slate Deck | Lato (sans) | 10.5 pt | Slate `#334155` | 1.6 / 10 | Normal |
-| Navy Report | Noto Serif (serif) | 9.8 pt | Navy `#1f4e79` | 1.55 / 8 | Narrow |
-| Navy Blue | Lato (sans) | 10.4 pt | Deep navy `#0b2545` | 1.62 / 9 | Compact |
-| Ink Paper | Crimson Text (classic serif) | 11.2 pt | Graphite `#3f3f46` | 1.7 / 12 | Wide |
-| Crimson Red | Crimson Text (classic serif) | 10.1 pt | Crimson `#a4161a` | 1.66 / 10 | Normal |
+| Preset | URL value | Primary |
+| --- | --- | --- |
+| Mint Deck | `mint` | Teal `#0f766e` |
+| Navy Deck | `navydeck` | Dark navy `#0b2545` |
+| Olive Deck | `olivedeck` | Olive `#6a5e44` |
+| Pink Deck | `pinkdeck` | Pink `#be185d` |
+| Violet Deck | `violetdeck` | Violet `#6d28d9` |
+| Indigo Deck | `indigodeck` | Indigo `#4338ca` |
+| Teal Deck | `tealdeck` | Teal `#115e59` |
+| Light Gray Deck | `lightgraydeck` | Gray `#6b7280` |
+| Light Black Deck | `lightblackdeck` | Charcoal `#27272a` |
 
-Each preset fully defines its font size and margin; there are no separate size,
-margin, or custom controls.
+Mint and Navy keep neutral headings; the other seven presets colour H1–H3 and
+the blockquote bar with their palette colour. Links are always GitHub-style
+light blue (`#58a6ff`). All presets use the same clean table style: a dark
+header in the theme's primary colour with white text, very subtly striped white
+body rows, a slightly stronger light-gray outer border, and subtle lighter
+rules between rows.
 
-All presets use the same clean table style: a dark header in the theme's primary
-colour with white text, very subtly striped white body rows, a slightly stronger light-gray
-outer border, and subtle lighter rules between rows.
+## URL payload and options
+
+The HTML document can be supplied in the address bar instead of typed into the
+editor. Put the UTF-8 base64 in the fragment (preferred, so the payload is not
+sent to a server):
+
+```
+index.html#<base64>
+index.html#html=<base64>
+index.html?html=<base64>          # older fallback
+```
+
+Build one from the console with
+`QPrinterCodec.utf8ToBase64('<h1>Hello</h1>')`. On load (or hash navigation)
+the decoded markup is placed in the **HTML** tab editor; the URL tab still
+fetches a web page URL as before.
+
+Query options configure the PDF at the same time:
+
+```
+index.html?theme=olivedeck&filename=report&page_size=A4&page_number=false&toc=true&footer=Confidential&watermark=DRAFT#<base64>
+```
+
+| Parameter | Aliases | Effect |
+| --- | --- | --- |
+| `filename` | `name` | Download filename (without `.pdf`) |
+| `theme` | — | Any theme URL value from the table above |
+| `page_size` | `pagesize`, `size` | `A4` or `Letter` |
+| `page_number` | `page_numbers`, `pagenumber`, `pagenumbers` | Show page numbers |
+| `toc` | `auto_toc`, `autotoc`, `table_of_contents` | Insert a table of contents |
+| `footer` | `footer_text`, `footertext` | Footer text on every page |
+| `watermark` | — | Faint diagonal watermark |
+
+Booleans accept `true`/`1`/`yes`/`on` and `false`/`0`/`no`/`off`/empty.
 
 ## Files
 
@@ -107,7 +144,8 @@ outer border, and subtle lighter rules between rows.
 - **Markdown / HTML / URL** tabs switch input format (each keeps its own draft).
   URL mode accepts a web address, fetches the page and builds the PDF from it.
   Blocked cross-origin requests fall back to a reader service; the original
-  URL is never sent anywhere except the site itself and that reader.
+  URL is never sent anywhere except the site itself and that reader. A base64
+  HTML payload in the address bar instead fills the **HTML** tab directly.
 - **Sample** and **Clear** above the editor.
 - **Settings** (preview header) opens a left offcanvas with **Theme template**, **Page size**, **Filename**, **Page numbers**, **Insert table of contents**, **Footer text** and **Watermark**.
   - **Insert table of contents** adds a linked contents block after the first title/heading (or the first element when there is no heading). Entries come from the document headings.

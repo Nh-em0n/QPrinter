@@ -20,7 +20,6 @@
   const LATO = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/lato/';
   const NOTO_SERIF = FONT_BASE + 'NotoSerif/';
   const POPPINS = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/';
-  const CRIMSON = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/crimsontext/';
   const KATEX = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/fonts/';
   const EMOJI = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notoemoji/';
 
@@ -49,58 +48,62 @@
       sansBold: LATO + 'Lato-Bold.ttf',
       sansBoldItalic: LATO + 'Lato-BoldItalic.ttf'
     },
-    serif: {
-      serif: NOTO_SERIF + 'NotoSerif-Regular.ttf',
-      serifItalic: NOTO_SERIF + 'NotoSerif-Italic.ttf',
-      serifBold: NOTO_SERIF + 'NotoSerif-Bold.ttf',
-      serifBoldItalic: NOTO_SERIF + 'NotoSerif-BoldItalic.ttf'
-    },
     geometric: {
       geometric: POPPINS + 'Poppins-Regular.ttf',
       geometricItalic: POPPINS + 'Poppins-Italic.ttf',
       geometricBold: POPPINS + 'Poppins-Bold.ttf',
       geometricBoldItalic: POPPINS + 'Poppins-BoldItalic.ttf'
-    },
-    classic: {
-      classic: CRIMSON + 'CrimsonText-Regular.ttf',
-      classicItalic: CRIMSON + 'CrimsonText-Italic.ttf',
-      classicBold: CRIMSON + 'CrimsonText-Bold.ttf',
-      classicBoldItalic: CRIMSON + 'CrimsonText-BoldItalic.ttf'
     }
   };
 
-  // Modern document presets. Mint Deck is the reference look; the other five
-  // are rebuilt from it with their own font, size, colour, spacing and margin.
+  // Every preset is an exact Mint Deck clone (same Poppins font, size, spacing
+  // and margins) with its own palette. Presets with colouredHeadings also tint
+  // H1-H3 and the blockquote bar with their palette colour.
   const THEMES = {
     mint: {
       label: 'Mint Deck', fontFamily: 'geometric', fontSize: 10,
       lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
       primary: '#0f766e', justify: false, runningHead: true
     },
-    slate: {
-      label: 'Slate Deck', fontFamily: 'sans', fontSize: 10.5,
-      lineHeight: 1.6, paragraphGap: 10, margin: 'normal',
-      primary: '#334155', justify: true, runningHead: true
-    },
-    navy: {
-      label: 'Navy Report', fontFamily: 'serif', fontSize: 9.8,
-      lineHeight: 1.55, paragraphGap: 8, margin: 'narrow',
-      primary: '#1f4e79', justify: false, runningHead: true
-    },
-    navyblue: {
-      label: 'Navy Blue', fontFamily: 'sans', fontSize: 10.4,
-      lineHeight: 1.62, paragraphGap: 9, margin: 'compact',
+    navydeck: {
+      label: 'Navy Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
       primary: '#0b2545', justify: false, runningHead: true
     },
-    ink: {
-      label: 'Ink Paper', fontFamily: 'classic', fontSize: 11.2,
-      lineHeight: 1.7, paragraphGap: 12, margin: 'wide',
-      primary: '#3f3f46', justify: true, runningHead: true
+    olivedeck: {
+      label: 'Olive Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#6a5e44', justify: false, runningHead: true, coloredHeadings: true
     },
-    crimsonred: {
-      label: 'Crimson Red', fontFamily: 'classic', fontSize: 10.1,
-      lineHeight: 1.66, paragraphGap: 10, margin: 'normal',
-      primary: '#a4161a', justify: false, runningHead: true
+    pinkdeck: {
+      label: 'Pink Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#be185d', justify: false, runningHead: true, coloredHeadings: true
+    },
+    violetdeck: {
+      label: 'Violet Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#6d28d9', justify: false, runningHead: true, coloredHeadings: true
+    },
+    indigodeck: {
+      label: 'Indigo Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#4338ca', justify: false, runningHead: true, coloredHeadings: true
+    },
+    tealdeck: {
+      label: 'Teal Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#115e59', justify: false, runningHead: true, coloredHeadings: true
+    },
+    lightgraydeck: {
+      label: 'Light Gray Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#6b7280', justify: false, runningHead: true, coloredHeadings: true
+    },
+    lightblackdeck: {
+      label: 'Light Black Deck', fontFamily: 'geometric', fontSize: 10,
+      lineHeight: 1.68, paragraphGap: 11, margin: 'relaxed',
+      primary: '#27272a', justify: false, runningHead: true, coloredHeadings: true
     }
   };
 
@@ -117,20 +120,30 @@
     return '#' + part(0) + part(2) + part(4);
   }
 
+  // Links are the same GitHub-style light blue in every theme; the font and all
+  // other typography stay exactly as they are.
+  const LINK_COLOR = '#58a6ff';
+
   // Tint the neutral white/light-gray surfaces with the theme's primary colour.
   // Tables use a darkened shade of the theme colour for the header and light borders on white rows.
-  function themeColors(primary) {
+  function themeColors(primary, themeKey) {
     const p = /^#[0-9a-f]{6}$/i.test(primary || '') ? primary : THEMES.mint.primary;
+    // Presets marked colouredHeadings tint H1-H3 with their palette colour;
+    // Mint and Navy keep the neutral heading colour. The quote bar always
+    // follows the active theme colour.
+    const colorHeadings = !!(THEMES[themeKey] && THEMES[themeKey].coloredHeadings);
     return {
       background: '#ffffff',
       surface: mix(p, '#ffffff', 0.94),
       surfaceAlt: mix(p, '#ffffff', 0.88),
       text: '#1f2328',
       heading: '#1f2328',
+      headingEmphasis: colorHeadings ? p : '#1f2328',
       muted: '#656d76',
       accent: p,
+      quoteBar: p,
       border: mix(p, '#ffffff', 0.78),
-      link: p,
+      link: LINK_COLOR,
       quoteText: '#3a4048',
       codeBg: '#f3f6f9',
       codeBorder: '#d8dee4',
@@ -235,6 +248,132 @@
 
   function showOverlay(show) {
     overlay.classList.toggle('hidden', !show);
+  }
+
+  // ---------- UTF-8-safe base64 URL payload ----------
+  // Same codec as LPrinter: TextEncoder -> chunked btoa, and atob -> TextDecoder.
+  function utf8ToBase64(str) {
+    const utf8Bytes = new TextEncoder().encode(String(str));
+    let binaryString = '';
+    const chunkSize = 0x8000;
+    for (let i = 0; i < utf8Bytes.length; i += chunkSize) {
+      const chunk = utf8Bytes.subarray(i, i + chunkSize);
+      binaryString += String.fromCharCode.apply(null, chunk);
+    }
+    return btoa(binaryString);
+  }
+
+  function base64ToUtf8(str) {
+    const binaryString = atob(str);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
+  }
+
+  // Expose the codec so a URL can be built from the browser console:
+  // QPrinterCodec.utf8ToBase64('<h1>Hi</h1>')
+  window.QPrinterCodec = { utf8ToBase64: utf8ToBase64, base64ToUtf8: base64ToUtf8 };
+
+  const URL_KEYS = ['html', 'data', 'content', 'b64', 'base64', 'htmlbase64'];
+  const FRAGMENT_KEY_RE = /^\s*(?:html|data|content|b64|base64|htmlbase64)\s*=/i;
+
+  function normalizeBase64(value) {
+    let s = String(value || '').replace(/ /g, '+').replace(/[\r\n\t]+/g, '');
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    return s;
+  }
+
+  function base64FromLocation() {
+    const fragment = location.hash.replace(/^#/, '');
+    if (fragment) {
+      if (FRAGMENT_KEY_RE.test(fragment)) {
+        const hashParams = new URLSearchParams(fragment);
+        for (const [key, value] of hashParams.entries()) {
+          if (URL_KEYS.indexOf(key.toLowerCase()) >= 0 && value) return value;
+        }
+      }
+      if (/^[A-Za-z0-9+/\-_=\s]+$/.test(fragment)) return fragment;
+    }
+    const params = new URLSearchParams(location.search);
+    for (const [key, value] of params.entries()) {
+      if (URL_KEYS.indexOf(key.toLowerCase()) >= 0 && value) return value;
+    }
+    return '';
+  }
+
+  function paramValue(params, names) {
+    for (const name of names) {
+      if (params.has(name)) return params.get(name);
+    }
+    return null;
+  }
+
+  function parseBool(value, fallback) {
+    if (value === null) return fallback;
+    const v = value.trim().toLowerCase();
+    if (v === '1' || v === 'true' || v === 'yes' || v === 'on') return true;
+    if (v === '0' || v === 'false' || v === 'no' || v === 'off' || v === '') return false;
+    return fallback;
+  }
+
+  function applyUrlOptions() {
+    const params = new URLSearchParams(location.search);
+
+    const filename = paramValue(params, ['filename', 'name']);
+    if (filename !== null && filename.trim()) $('filename').value = filename.trim();
+
+    const theme = paramValue(params, ['theme']);
+    if (theme && THEMES[theme.trim().toLowerCase()]) applyTheme(theme.trim().toLowerCase());
+
+    const pageSize = paramValue(params, ['page_size', 'pagesize', 'size']);
+    if (pageSize) {
+      const v = pageSize.trim().toLowerCase();
+      if (v === 'a4') $('pageSize').value = 'A4';
+      else if (v === 'letter') $('pageSize').value = 'Letter';
+    }
+
+    $('pageNumbers').checked = parseBool(
+      paramValue(params, ['page_number', 'page_numbers', 'pagenumber', 'pagenumbers']),
+      $('pageNumbers').checked
+    );
+    $('autoToc').checked = parseBool(
+      paramValue(params, ['toc', 'auto_toc', 'autotoc', 'table_of_contents']),
+      $('autoToc').checked
+    );
+
+    const footer = paramValue(params, ['footer', 'footer_text', 'footertext']);
+    if (footer !== null) $('footerText').value = footer;
+    const watermark = paramValue(params, ['watermark']);
+    if (watermark !== null) $('watermark').value = watermark;
+  }
+
+  function applyUrlSource() {
+    const payload = base64FromLocation();
+    if (!payload) return false;
+
+    let html;
+    try {
+      html = base64ToUtf8(normalizeBase64(payload));
+    } catch (err) {
+      console.warn('Ignoring invalid URL HTML payload.', err);
+      setStatus('Error: invalid HTML payload in URL', true);
+      return false;
+    }
+    if (!html.trim()) return false;
+
+    // Put the decoded markup in the HTML editor, not behind another fetch.
+    store.set(sourceKey('html'), html);
+    setMode('html');
+    setStatus('Loaded HTML from URL · Ctrl+Enter to render');
+    return true;
+  }
+
+  function applyUrlConfig() {
+    applyUrlOptions();
+    applyUrlSource();
   }
 
   // Apply a preset to the style state used by the renderer. Presets own the
@@ -665,7 +804,7 @@
         autoToc: state.autoToc,
         footerText: state.footerText,
         watermark: state.watermark,
-        colors: themeColors(state.primary),
+        colors: themeColors(state.primary, state.theme),
         fonts: fontsForTheme(state.fontFamily)
       };
       if (source.title) pdfOptions.title = source.title;
@@ -763,6 +902,11 @@
 
   $('refreshBtn').addEventListener('click', generate);
 
+  // A new base64 fragment (or history navigation) replaces the HTML editor
+  // contents and reapplies any PDF options carried in the query string.
+  window.addEventListener('hashchange', applyUrlConfig);
+  window.addEventListener('popstate', applyUrlConfig);
+
   // Manual render shortcut. Works while editing the source or changing any
   // setting, so there is no need to move focus back to the Refresh button.
   document.addEventListener('keydown', (e) => {
@@ -814,6 +958,10 @@
     btn.classList.toggle('active', btn.dataset.mode === state.mode);
     btn.setAttribute('aria-selected', String(btn.dataset.mode === state.mode));
   });
+
+  // A URL payload wins over the restored draft: decode it into the HTML editor.
+  applyUrlConfig();
+
   countsEl.textContent = (editor.value.trim() ? editor.value.trim().split(/\s+/).length : 0).toLocaleString() +
     ' words · ' + editor.value.length.toLocaleString() + ' characters';
 
