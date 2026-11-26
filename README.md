@@ -74,9 +74,10 @@ error instead of staying on the “Building PDF…” spinner.
 
 ## Theme presets
 
-Choose **Theme template** in the settings drawer. All nine presets are exact
-Mint Deck clones — same Poppins face, 10 pt size, 1.68/11 spacing and relaxed
-margins — with their own palette. Only the Poppins face is embedded.
+Choose **Theme template** in the settings drawer. **Navy Deck** is the default.
+All nine presets are exact Mint Deck clones — same Poppins face, 10 pt size,
+1.68/11 spacing and relaxed margins — with their own palette. Only the Poppins
+face is embedded.
 
 | Preset | URL value | Primary |
 | --- | --- | --- |
@@ -117,7 +118,7 @@ fetches a web page URL as before.
 Query options configure the PDF at the same time:
 
 ```
-index.html?theme=olivedeck&filename=report&page_size=A4&page_number=false&toc=true&footer=Confidential&watermark=DRAFT#<base64>
+index.html?theme=olivedeck&filename=report&page_size=A4&page_number=false&toc=true&toc_index=false&footer=Confidential&watermark=DRAFT#<base64>
 ```
 
 | Parameter | Aliases | Effect |
@@ -127,6 +128,7 @@ index.html?theme=olivedeck&filename=report&page_size=A4&page_number=false&toc=tr
 | `page_size` | `pagesize`, `size` | `A4` or `Letter` |
 | `page_number` | `page_numbers`, `pagenumber`, `pagenumbers` | Show page numbers |
 | `toc` | `auto_toc`, `autotoc`, `table_of_contents` | Insert a table of contents |
+| `toc_index` | `tocindex`, `index_toc`, `indextoc`, `toc_numbers`, `tocnumber` | Number TOC entries and show page indices (default `true`) |
 | `footer` | `footer_text`, `footertext` | Footer text on every page |
 | `watermark` | — | Faint diagonal watermark |
 
@@ -147,8 +149,9 @@ Booleans accept `true`/`1`/`yes`/`on` and `false`/`0`/`no`/`off`/empty.
   URL is never sent anywhere except the site itself and that reader. A base64
   HTML payload in the address bar instead fills the **HTML** tab directly.
 - **Sample** and **Clear** above the editor.
-- **Settings** (preview header) opens a left offcanvas with **Theme template**, **Page size**, **Filename**, **Page numbers**, **Insert table of contents**, **Footer text** and **Watermark**.
-  - **Insert table of contents** adds a linked contents block after the first title/heading (or the first element when there is no heading). Entries come from the document headings.
+- **Settings** (preview header) opens a left offcanvas with **Theme template**, **Page size**, **Filename**, **Page numbers**, **Insert table of contents**, **Index table of contents**, **Footer text** and **Watermark**.
+  - **Insert table of contents** adds a linked contents block after the first title/heading (or the first element when there is no heading). Entries come from the document headings. **Index table of contents** (on by default) adds hierarchical `1.`, `1.1.` numbers and page indices, and lets a long contents list flow onto extra pages; turn it off for plain entries.
+  - **Code blocks** are flat, borderless panels drawn one point smaller than body text with compact padding. Inline code uses pink text with no background.
   - **Footer text** prints at the bottom-left of every page; **Watermark** draws faint 30° diagonal text across every page. Leave either blank to disable it.
   - Settings changes rebuild the PDF after a 3-second pause; the editor uses a shorter 400 ms preview delay.
 - **Download PDF** saves the exact blob shown in the preview.

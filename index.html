@@ -128,8 +128,8 @@
         <div class="field">
           <label for="theme">Theme template</label>
           <select id="theme" class="control">
-            <option value="mint" selected>Mint Deck</option>
-            <option value="navydeck">Navy Deck</option>
+            <option value="mint">Mint Deck</option>
+            <option value="navydeck" selected>Navy Deck</option>
             <option value="olivedeck">Olive Deck</option>
             <option value="pinkdeck">Pink Deck</option>
             <option value="violetdeck">Violet Deck</option>
@@ -159,6 +159,11 @@
           <input type="checkbox" id="autoToc">
           <span class="switch__track" aria-hidden="true"></span>
           <span>Insert table of contents</span>
+        </label>
+        <label class="switch" for="tocIndex">
+          <input type="checkbox" id="tocIndex" checked>
+          <span class="switch__track" aria-hidden="true"></span>
+          <span>Index table of contents</span>
         </label>
       </section>
 

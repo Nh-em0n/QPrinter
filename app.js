@@ -148,7 +148,7 @@
       codeBg: '#f3f6f9',
       codeBorder: '#d8dee4',
       codeFg: '#2b3440',
-      inlineCodeBg: mix(p, '#ffffff', 0.90),
+      inlineCodeFg: '#db2777',
       mark: mix(p, '#ffffff', 0.84),
       tableHeaderBg: mix(p, '#000000', 0.35),
       tableHeaderText: '#ffffff',
@@ -213,18 +213,19 @@
   const savedMode = store.get('mdpdf:mode');
   const state = {
     mode: ['html', 'markdown', 'url'].indexOf(savedMode) >= 0 ? savedMode : 'markdown',
-    theme: 'mint',
-    fontFamily: THEMES.mint.fontFamily,
-    primary: THEMES.mint.primary,
-    lineHeight: THEMES.mint.lineHeight,
-    paragraphGap: THEMES.mint.paragraphGap,
-    justify: THEMES.mint.justify,
-    runningHead: THEMES.mint.runningHead,
-    fontSize: THEMES.mint.fontSize,
+    theme: 'navydeck',
+    fontFamily: THEMES.navydeck.fontFamily,
+    primary: THEMES.navydeck.primary,
+    lineHeight: THEMES.navydeck.lineHeight,
+    paragraphGap: THEMES.navydeck.paragraphGap,
+    justify: THEMES.navydeck.justify,
+    runningHead: THEMES.navydeck.runningHead,
+    fontSize: THEMES.navydeck.fontSize,
     pageSize: 'A4',
-    margin: THEMES.mint.margin,
+    margin: THEMES.navydeck.margin,
     pageNumbers: true,
     autoToc: false,
+    tocIndex: true,
     footerText: '',
     watermark: ''
   };
@@ -343,6 +344,10 @@
       paramValue(params, ['toc', 'auto_toc', 'autotoc', 'table_of_contents']),
       $('autoToc').checked
     );
+    $('tocIndex').checked = parseBool(
+      paramValue(params, ['toc_index', 'tocindex', 'index_toc', 'indextoc', 'toc_numbers', 'tocnumber']),
+      $('tocIndex').checked
+    );
 
     const footer = paramValue(params, ['footer', 'footer_text', 'footertext']);
     if (footer !== null) $('footerText').value = footer;
@@ -379,8 +384,8 @@
   // Apply a preset to the style state used by the renderer. Presets own the
   // font size and margin, so there is no separate custom mode.
   function applyTheme(id) {
-    const theme = THEMES[id] || THEMES.mint;
-    state.theme = THEMES[id] ? id : 'mint';
+    const theme = THEMES[id] || THEMES.navydeck;
+    state.theme = THEMES[id] ? id : 'navydeck';
     state.fontFamily = theme.fontFamily;
     state.primary = theme.primary;
     state.lineHeight = theme.lineHeight;
@@ -785,6 +790,7 @@
       state.pageSize = $('pageSize').value;
       state.pageNumbers = $('pageNumbers').checked;
       state.autoToc = $('autoToc').checked;
+      state.tocIndex = $('tocIndex').checked;
       state.footerText = $('footerText').value.trim();
       state.watermark = $('watermark').value.trim();
 
@@ -802,6 +808,7 @@
         fontFamily: state.fontFamily,
         pageNumbers: state.pageNumbers,
         autoToc: state.autoToc,
+        tocIndex: state.tocIndex,
         footerText: state.footerText,
         watermark: state.watermark,
         colors: themeColors(state.primary, state.theme),
@@ -836,6 +843,7 @@
         margin: state.margin,
         pageNumbers: state.pageNumbers,
         autoToc: state.autoToc,
+        tocIndex: state.tocIndex,
         footerText: state.footerText,
         watermark: state.watermark
       }));
@@ -932,7 +940,7 @@
     markDirty();
   });
 
-  ['pageSize', 'pageNumbers', 'autoToc', 'filename', 'footerText', 'watermark'].forEach((id) => {
+  ['pageSize', 'pageNumbers', 'autoToc', 'tocIndex', 'filename', 'footerText', 'watermark'].forEach((id) => {
     $(id).addEventListener('input', markDirty);
     $(id).addEventListener('change', markDirty);
   });
@@ -944,10 +952,11 @@
   } catch (err) {
     console.warn('Ignoring invalid saved options.', err);
   }
-  applyTheme(THEMES[savedOptions.theme] ? savedOptions.theme : 'mint');
+  applyTheme(THEMES[savedOptions.theme] ? savedOptions.theme : 'navydeck');
   if (savedOptions.pageSize) $('pageSize').value = savedOptions.pageSize;
   if (typeof savedOptions.pageNumbers === 'boolean') $('pageNumbers').checked = savedOptions.pageNumbers;
   if (typeof savedOptions.autoToc === 'boolean') $('autoToc').checked = savedOptions.autoToc;
+  if (typeof savedOptions.tocIndex === 'boolean') $('tocIndex').checked = savedOptions.tocIndex;
   if (typeof savedOptions.footerText === 'string') $('footerText').value = savedOptions.footerText;
   if (typeof savedOptions.watermark === 'string') $('watermark').value = savedOptions.watermark;
 
